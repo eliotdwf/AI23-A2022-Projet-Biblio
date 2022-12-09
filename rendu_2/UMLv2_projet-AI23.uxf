@@ -1,0 +1,98 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>8</zoom_level><element><id>UMLClass</id><coordinates><x>712</x><y>0</y><w>200</w><h>168</h></coordinates><panel_attributes>_/Ressource/_
+--
+code : string {key}
+titre : string
+dateApparition : Date
+editeur : string
+genre : string
+codeClassification : string
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>576</x><y>384</y><w>168</w><h>72</h></coordinates><panel_attributes>_Livre_
+--
+ISBN : string {key}
+resume : string
+langue : string
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>648</x><y>160</y><w>168</w><h>240</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>190;10;190;160;10;160;10;280</additional_attributes></element><element><id>UMLClass</id><coordinates><x>760</x><y>384</y><w>192</w><h>72</h></coordinates><panel_attributes>_Film_
+--
+longueur : integer	//nombre de minutes
+langue : string
+synopsis : string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>968</x><y>384</y><w>176</w><h>56</h></coordinates><panel_attributes>_EnregistrementMusical_
+--
+longueur : integer //nb de secondes ?</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>792</x><y>160</y><w>64</w><h>240</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;160;60;160;60;280</additional_attributes></element><element><id>Relation</id><coordinates><x>792</x><y>160</y><w>272</w><h>240</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;160;320;160;320;280</additional_attributes></element><element><id>UMLClass</id><coordinates><x>112</x><y>144</y><w>168</w><h>112</h></coordinates><panel_attributes>_/Utilisateur/_
+--
+login : string {key}
+motDePasse : string
+nom : string
+prenom : string
+email : string
+adresse : string
+administrateur : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>400</y><w>168</w><h>80</h></coordinates><panel_attributes>_Personnel_
+--
+--
+-ModifierUser()
+-CreerRessource()
+-CreerPret()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>176</x><y>400</y><w>168</w><h>112</h></coordinates><panel_attributes>_Adherent_
+--
+dateNaissance : Date
+numTelephone : string
+carteActive : boolean
+--
+-RechercheDoc()
+-ConsulterProfil()
+-ModifierProfil()
+-ConsulterEmprunt()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>88</x><y>248</y><w>112</w><h>168</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>120;10;120;110;10;110;10;190</additional_attributes></element><element><id>Relation</id><coordinates><x>176</x><y>248</y><w>120</w><h>168</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;110;130;110;130;190</additional_attributes></element><element><id>UMLClass</id><coordinates><x>352</x><y>176</y><w>184</w><h>56</h></coordinates><panel_attributes>_Exemplaire_
+--
+etat : Etat</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>528</x><y>144</y><w>200</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..n</panel_attributes><additional_attributes>230;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>224</y><w>160</w><h>192</h></coordinates><panel_attributes>lt=-
+m1=0..5
+m2=0..n
+</panel_attributes><additional_attributes>10;220;170;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>368</x><y>400</y><w>168</w><h>56</h></coordinates><panel_attributes>_Pret_
+--
+date : Date
+duree : integer</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>376</x><y>320</y><w>96</w><h>96</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;100;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>736</x><y>592</y><w>104</w><h>88</h></coordinates><panel_attributes>Contrib
+--
+Compositeur 
+Interprete
+Auteur
+Réalisateur
+Acteur</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>424</x><y>88</y><w>48</w><h>80</h></coordinates><panel_attributes>Etat
+--
+Neuf
+Bon
+Abimé
+Perdu</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>400</x><y>304</y><w>104</w><h>32</h></coordinates><panel_attributes>Possible ssi Etat =
+Neuf OU Bon
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>824</x><y>232</y><w>216</w><h>40</h></coordinates><panel_attributes>Héritage exclusif : une ressource ne peut être
+que d'un seul type</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>856</x><y>584</y><w>304</w><h>112</h></coordinates><panel_attributes>_Contributeur_
+--
+nom : string {key}
+prenom : string {key}
+dateNaissance : Date
+nationalite : string
+type : Contrib</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1088</x><y>432</y><w>72</w><h>168</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=1..n
+participe à</panel_attributes><additional_attributes>10;10;10;190</additional_attributes></element><element><id>Relation</id><coordinates><x>928</x><y>448</y><w>72</w><h>152</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=1..n
+participe à </panel_attributes><additional_attributes>10;10;10;170</additional_attributes></element><element><id>UMLNote</id><coordinates><x>440</x><y>480</y><w>216</w><h>56</h></coordinates><panel_attributes>ISBN = International Standard Book Number
+Unique à chaque ressource MAIS pas unique à 
+chaque exemplaire</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>448</y><w>240</w><h>152</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=1..n
+&lt; participe à </panel_attributes><additional_attributes>10;10;10;80;260;80;260;170</additional_attributes></element><element><id>UMLClass</id><coordinates><x>168</x><y>584</y><w>168</w><h>56</h></coordinates><panel_attributes>_Sanction_
+--
+id: integer
+dureeSuspension : Date</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>72</x><y>696</y><w>168</w><h>56</h></coordinates><panel_attributes>_Degradation_
+--
+remboursementFait : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>368</x><y>584</y><w>112</w><h>56</h></coordinates><panel_attributes>Si dureeSuspension = n 
+	¤ n = 0 : adhérent non suspendu
+	¤ n &gt; 0 : adhérent suspendu pour une durée de n jours
+	¤ n = -1 : adhérent suspendu indéfiniment
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>216</x><y>504</y><w>40</w><h>96</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=0..n</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>272</x><y>696</y><w>168</w><h>56</h></coordinates><panel_attributes>_Retard_
+--
+nbJoursRetard : integer</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>248</x><y>632</y><w>112</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;50;120;50;120;80</additional_attributes></element><element><id>Relation</id><coordinates><x>168</x><y>632</y><w>104</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>110;10;110;50;10;50;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>608</x><y>448</y><w>24</w><h>48</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>328</x><y>600</y><w>56</w><h>24</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;50;10</additional_attributes></element></diagram>
