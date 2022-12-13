@@ -33,7 +33,7 @@
 ### Contributeur(#id:integer, nom:string, prenom:string, dateNaissance:date, nationalite:string)
 > nom NOT NULL, prenom NOT NULL
 
-### Contribue(#id=>Contributeur.id, #id=>Ressources.code, type:{Compositeur, Realisateur, Auteur, Interprete, Acteur})
+### Contribution(#id=>Contributeur.id, #id=>Ressources.code, type:{Compositeur, Realisateur, Auteur, Interprete, Acteur})
 > type NOT NULL
 
 ## Choix héritage:
