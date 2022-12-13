@@ -1,0 +1,51 @@
+# Modèle Logique de Données
+
+### Adherent(#login:string, motDePasse:string, nom:string, prenom:string, email:string, 
+adresse:string, dateNaissance:date, numTelephone:string, carte:boolean, nbEmprunts:integer)
+> carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, motDePasse NOT NULL
+
+### Personnel(#login:string, motDePasse:string, nom:string, prenom:string, email:string, 
+adresse:string)
+> nom NOT NULL, prenom NOT NULL email UNIQUE NOT NULL, motDePasse NOT NULL
+
+### Degradation(#id:integer, remboursementFait:boolean, adherent=>Adherent.login)
+> remboursementFait NOT NULL
+> 
+### Retard(#id:integer, debutSuspension:Date, nbJoursRetard:integer, adherent=>Adherent.login)
+> debutSuspension NOT NULL, nbJoursRetard NOT NULL et > 0
+
+### Exemplaire(#code=>Ressources.code, #id:integer, etat:{Neuf, Bon, Abimé, Perdu})
+> etat NOT NULL
+
+### Pret(#exemplaire=>Exemplaire.id, #adherent=>Adherent.login, date:Date, duree:integer)
+> durée NOT NULL, check(Projection(Jointure(Pret, Adherent, Pret.adherent = Adherent.id), 
+Adherent.nbEmprunt) < 5)
+
+### Ressources(#code:string, titre:string, dateApparition:date, editeur:string, genre:string, 
+codeClassification:string)
+> titre NOT NULL, dateApparition NOT NULL, codeClassification NOT NULL
+
+### Livre(#id=>Ressources.code, ISBN:string, resume:string, langue:string)
+> ISBN NOT NULL, langue NOT NULL
+
+### Film(#id=>Ressources.code, longueur:integer, langue:string, synopsis:string)
+> longueur NOT NULL, langue NOT NULL
+
+### EnregistrementMusical(#id=>Ressources.code, longueur:integer)
+> longueur NOT NULL
+
+### Contributeur(#id:integer, nom:string, prenom:string, dateNaissance:date, nationalite:string)
+> nom NOT NULL, prenom NOT NULL
+
+### Contribue(#id=>Contributeur.id, #id=>Ressources.code, type:{Compositeur, Realisateur, Auteur, 
+Interprete, Acteur})
+> type NOT NULL
+
+## Choix héritage:
+- Héritage par classe fille pour les tables Adhérent et Personnel car la classe mère est abstraite 
+et parce que la classe fille Adhérent possède des associations.
+- Héritage par classe fille pour les tables Degradation et Retard car une Sanction est de type 
+Degradation OU Retard mais pas les 2 (héritage exclusif), de plus la classe Sanction est abstraite.
+- Héritage par référence pour la table Ressource qui n'est pas abstraite et permet de mettre en 
+commun beaucoup d'attributs, tout en facilitant l'association entre Ressource et Exemplaire.
+
