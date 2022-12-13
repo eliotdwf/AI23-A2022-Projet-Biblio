@@ -73,18 +73,12 @@ nom : string {key}
 prenom : string {key}
 dateNaissance : Date
 nationalite : string
-type : Contrib</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1224</x><y>486</y><w>81</w><h>189</h></coordinates><panel_attributes>lt=-
-m1=0..n
+type : Contrib</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1017</x><y>72</y><w>468</w><h>675</h></coordinates><panel_attributes>lt=-
+m1=*
 m2=1..n
-participe à</panel_attributes><additional_attributes>10;10;10;190</additional_attributes></element><element><id>Relation</id><coordinates><x>1044</x><y>504</y><w>81</w><h>171</h></coordinates><panel_attributes>lt=-
-m1=0..n
-m2=1..n
-participe à </panel_attributes><additional_attributes>10;10;10;170</additional_attributes></element><element><id>UMLNote</id><coordinates><x>495</x><y>540</y><w>243</w><h>63</h></coordinates><panel_attributes>ISBN = International Standard Book Number
+contribue</panel_attributes><additional_attributes>10;10;450;10;450;720;320;720</additional_attributes></element><element><id>UMLNote</id><coordinates><x>495</x><y>540</y><w>243</w><h>63</h></coordinates><panel_attributes>ISBN = International Standard Book Number
 Unique à chaque ressource MAIS pas unique à 
-chaque exemplaire</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>765</x><y>504</y><w>270</w><h>171</h></coordinates><panel_attributes>lt=-
-m1=0..n
-m2=1..n
-&lt; participe à </panel_attributes><additional_attributes>10;10;10;80;260;80;260;170</additional_attributes></element><element><id>UMLClass</id><coordinates><x>189</x><y>657</y><w>189</w><h>63</h></coordinates><panel_attributes>_/Sanction/_
+chaque exemplaire</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>189</x><y>657</y><w>189</w><h>63</h></coordinates><panel_attributes>_/Sanction/_
 --
 id: integer
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>81</x><y>783</y><w>189</w><h>63</h></coordinates><panel_attributes>_Degradation_
