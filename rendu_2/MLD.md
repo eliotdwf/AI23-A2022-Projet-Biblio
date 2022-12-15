@@ -17,7 +17,7 @@
 > etat NOT NULL
 
 ### Pret(#exemplaire=>Exemplaire.id, #adherent=>Adherent.login, date:Date, duree:integer)
-> durée NOT NULL, check(Projection(Jointure(Pret, Adherent, Pret.adherent = Adherent.id), Adherent.nbEmprunt) < 5)
+> durée NOT NULL, check(adherent.nb_emprunts < 5)
 
 ### Ressources(#code:string, titre:string, date_apparition:date, editeur:string, genre:string, code_classification:string)
 > titre NOT NULL, dateApparition NOT NULL, codeClassification NOT NULL
