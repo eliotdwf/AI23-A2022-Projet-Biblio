@@ -1,15 +1,15 @@
 # Modèle Logique de Données
 
-### Adherent(#login:string, motDePasse:string, nom:string, prenom:string, email:string, adresse:string, dateNaissance:date, numTelephone:string, carte:boolean, nbEmprunts:integer)
+### Adherent(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string, ddn:date, num_tel:string, carte_active:boolean, nb_emprunts:integer)
 > carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, motDePasse NOT NULL
 
-### Personnel(#login:string, motDePasse:string, nom:string, prenom:string, email:string, adresse:string)
+### Personnel(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string)
 > nom NOT NULL, prenom NOT NULL email UNIQUE NOT NULL, motDePasse NOT NULL
 
-### Degradation(#id:integer, remboursementFait:boolean, adherent=>Adherent.login)
+### Degradation(#id:integer, remboursement_fait:boolean, adherent=>Adherent.login)
 > remboursementFait NOT NULL
 
-### Retard(#id:integer, debutSuspension:Date, nbJoursRetard:integer, adherent=>Adherent.login)
+### Retard(#id:integer, debut_suspension:Date, nb_jours_retard:integer, adherent=>Adherent.login)
 > debutSuspension NOT NULL, nbJoursRetard NOT NULL et > 0
 
 ### Exemplaire(#code=>Ressources.code, #id:integer, etat:{Neuf, Bon, Abimé, Perdu})
@@ -18,7 +18,7 @@
 ### Pret(#exemplaire=>Exemplaire.id, #adherent=>Adherent.login, date:Date, duree:integer)
 > durée NOT NULL, check(Projection(Jointure(Pret, Adherent, Pret.adherent = Adherent.id), Adherent.nbEmprunt) < 5)
 
-### Ressources(#code:string, titre:string, dateApparition:date, editeur:string, genre:string, codeClassification:string)
+### Ressources(#code:string, titre:string, date_apparition:date, editeur:string, genre:string, code_classification:string)
 > titre NOT NULL, dateApparition NOT NULL, codeClassification NOT NULL
 
 ### Livre(#id=>Ressources.code, ISBN:string, resume:string, langue:string)
@@ -30,10 +30,10 @@
 ### EnregistrementMusical(#id=>Ressources.code, longueur:integer)
 > longueur NOT NULL
 
-### Contributeur(#id:integer, nom:string, prenom:string, dateNaissance:date, nationalite:string)
+### Contributeur(#id:integer, nom:string, prenom:string, ddn:date, nationalite:string)
 > nom NOT NULL, prenom NOT NULL
 
-### Contribution(#id=>Contributeur.id, #id=>Ressources.code, type:{Compositeur, Realisateur, Auteur, Interprete, Acteur})
+### Contribution(#id=>Contributeur.id, #code=>Ressources.code, type:{Compositeur, Realisateur, Auteur, Interprete, Acteur})
 > type NOT NULL
 
 ## Choix héritage:
