@@ -1,10 +1,11 @@
 # Modèle Logique de Données
 
 ### Adherent(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string, ddn:date, num_tel:string, carte_active:boolean, nb_emprunts:integer)
-> carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, motDePasse NOT NULL
+> carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, mdp NOT NULL, ddn NOT NULL
+> nb_emprunts >= 0
 
 ### Personnel(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string)
-> nom NOT NULL, prenom NOT NULL email UNIQUE NOT NULL, motDePasse NOT NULL
+> nom NOT NULL, prenom NOT NULL email UNIQUE NOT NULL, mdp NOT NULL
 
 ### Degradation(#id:integer, remboursement_fait:boolean, adherent=>Adherent.login)
 > remboursementFait NOT NULL
@@ -31,7 +32,7 @@
 > longueur NOT NULL
 
 ### Contributeur(#id:integer, nom:string, prenom:string, ddn:date, nationalite:string)
-> nom NOT NULL, prenom NOT NULL
+> nom NOT NULL, prenom NOT NULL, ddn NOT NULL
 
 ### Contribution(#id=>Contributeur.id, #code=>Ressources.code, type:{Compositeur, Realisateur, Auteur, Interprete, Acteur})
 > type NOT NULL
