@@ -1,26 +1,26 @@
 # Modèle Logique de Données
 
 ### Adherent(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string, ddn:date, num_tel:string, carte_active:boolean, nb_emprunts:integer)
-> carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, mdp NOT NULL, ddn NOT NULL
+> carte NOT NULL, nom NOT NULL, prenom NOT NULL, email UNIQUE NOT NULL, mdp NOT NULL, ddn NOT NULL  
 > nb_emprunts >= 0
 
 ### Personnel(#login:string, mdp:string, nom:string, prenom:string, mail:string, adresse:string)
 > nom NOT NULL, prenom NOT NULL email UNIQUE NOT NULL, mdp NOT NULL
 
 ### Degradation(#id:integer, remboursement_fait:boolean, adherent=>Adherent.login)
-> remboursementFait NOT NULL
+> remboursement_fait NOT NULL
 
 ### Retard(#id:integer, debut_suspension:Date, nb_jours_retard:integer, adherent=>Adherent.login)
-> debutSuspension NOT NULL, nbJoursRetard NOT NULL et > 0
+> debut_suspension NOT NULL, nb_jours_retard NOT NULL et > 0
 
-### Exemplaire(#code=>Ressources.code, #id:integer, etat:{Neuf, Bon, Abimé, Perdu})
+### Exemplaire(#id:integer, code=>Ressources.code, etat:{Neuf, Bon, Abimé, Perdu})
 > etat NOT NULL
 
 ### Pret(#exemplaire=>Exemplaire.id, #adherent=>Adherent.login, date:Date, duree:integer)
-> durée NOT NULL, check(Projection(Jointure(Pret, Adherent, Pret.adherent = Adherent.id), Adherent.nbEmprunt) < 5)
+> durée NOT NULL, check(Projection(Jointure(Pret, Adherent, Pret.adherent = Adherent.id), Adherent.nb_emprunts) < 5)
 
 ### Ressources(#code:string, titre:string, date_apparition:date, editeur:string, genre:string, code_classification:string)
-> titre NOT NULL, dateApparition NOT NULL, codeClassification NOT NULL
+> titre NOT NULL, date_apparition NOT NULL, code_classification NOT NULL
 
 ### Livre(#id=>Ressources.code, ISBN:string, resume:string, langue:string)
 > ISBN NOT NULL, langue NOT NULL
