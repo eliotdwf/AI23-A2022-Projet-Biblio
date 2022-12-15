@@ -42,3 +42,5 @@
 - Héritage par classe fille pour les tables Degradation et Retard car une Sanction est de type Degradation OU Retard mais pas les 2 (héritage exclusif), de plus la classe Sanction est abstraite.
 - Héritage par référence pour la table Ressource qui n'est pas abstraite et permet de mettre en commun beaucoup d'attributs, tout en facilitant l'association entre Ressource et Exemplaire.
 
+## Contrainte de minimalité 1:N
+- entre Contributeur et Ressources : (Projection(Contributeur, id) = Projection(Contribution, id) ET Projection(Ressources, code) = Projection(Contribution, code))
