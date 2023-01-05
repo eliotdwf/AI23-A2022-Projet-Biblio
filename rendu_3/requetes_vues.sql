@@ -25,7 +25,7 @@ GROUP BY a.nom, a.prenom;
 
 -- ressource la + empruntée
 SELECT max(nb_emprunts), code, titre
-FROM v_nb_emprunts;
+FROM v_nb_emprunts_par_ressource;
 
 -- adhérent avec le plus d'emprunts
 SELECT max(nb_emprunts), nom, prenom
