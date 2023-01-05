@@ -82,20 +82,56 @@ def chercherFilmByRealisateur(real):
 def chercherLivreByTitre(titre):
     print("recherche du livre à implémenter")
 
+
 def chercherLivreByDate(date):
     print("recherche du livre à implémenter")
 
 def chercherLivreByAuteur(auteur):
     print("recherche du livre à implémenter")
 
+def afficherMusiques(raws):
+    if(raws):
+        for raw in raws:
+            print("{")
+            print("\tcode ressource : %d" % raw[0])
+            print("\ttitre ressource : " + raw[1])
+            print("\tdate apparition : " + raw[2])
+            print("\tgenre : " + raw[3])
+            print("\tlongueur (en secondes) : %d" % raw[4])
+            print("\tauteur : " + raw[5] + " " + raw[6] + " (" + raw[7] + ")")
+    else:
+        print("Aucun résultat !")
+    
+
 def chercherMusiqueByTitre(titre):
-    print("recherche de la musique à implémenter")
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN EnregistrementMusical EM ON R.code = EM.id 
+    WHERE LOWER(R.titre) = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """
+    cur.execute(sql, [titre.lower()])
+    afficherMusiques(cur.fetchall())
 
 def chercherMusiqueByDate(date):
-    print("recherche de la musique à implémenter")
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN EnregistrementMusical EM ON R.code = EM.id 
+    WHERE R.dateApparition = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """
+    cur.execute(sql, [date])
+    afficherMusiques(cur.fetchall())
 
-def chercherMusiqueByAuteur(date):
-    print("recherche de la musique à implémenter")
+def chercherMusiqueByAuteur(auteur):
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN EnregistrementMusical EM ON R.code = EM.id 
+    WHERE LOWER(Contributeur.nom) = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """
+    cur.execute(sql, [auteur.lower()])
+    afficherMusiques(cur.fetchall())
 
 
 def demanderTypeRechercheFilm():
@@ -111,7 +147,7 @@ def demanderTypeRechercheLivre():
     choix = int(input("""Choix du type de recherche
         1. par titre du livre
         2. par date d'apparition du livre
-        3. par nom de l'auteur
+        3. par nom de famille l'auteur
         Choix : """))
     verifierChoix(choix, 3)
     return choix
@@ -120,7 +156,7 @@ def demanderTypeRechercheMusique():
     choix = int(input("""Choix du type de recherche
         1. par titre de la musique
         2. par date d'apparition de la musique
-        3. par nom de l'auteur
+        3. par nom de famille du compositeur ou de l'interprète
         Choix : """))
     verifierChoix(choix, 3)
     return choix
@@ -136,7 +172,7 @@ def chercherRessource():
             date = input("date d'apparition (AAAA-MM-JJ) : ")
             chercherFilmByDate(date)
         else:
-            realisateur = input("nom du réalisateur : ")
+            realisateur = input("nom de fammille du réalisateur : ")
             chercherFilmByRealisateur(realisateur)
 
     elif(typeRessource == "Livre"):
@@ -148,7 +184,7 @@ def chercherRessource():
             date = input("date d'apparition (AAAA-MM-JJ) : ")
             chercherLivreByDate(date)
         else:
-            auteur = input("nom de l'auteur : ")
+            auteur = input("nom de famille l'auteur : ")
             chercherLivreByAuteur(auteur)
 
     else:
@@ -160,7 +196,7 @@ def chercherRessource():
             date = input("date d'apparition (AAAA-MM-JJ) : ")
             chercherMusiqueByDate(date)
         else:
-            auteur = input("nom de l'auteur : ")
+            auteur = input("nom de fammille de l'auteur : ")
             chercherMusiqueByAuteur(auteur)
     
 
