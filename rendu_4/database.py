@@ -35,8 +35,10 @@ def demanderTypeRessource():
         return "Film"
     elif(type == 2):
         return "Livre"
-    else:
+    elif(type == 3):
         return "Musique"
+    else:
+        print("ERREUR")
     
 def afficherFilms(raws):
     for raw in raws:
@@ -69,33 +71,103 @@ def chercherFilmByDate(date):
     cur.execute(sql, [date])
     afficherFilms(cur.fetchall())
 
-def chercherFilmByAuteur(auteur):
-    
+def chercherFilmByRealisateur(real):
+    sql = """
+    SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, Ressource.genre, Film.langue, Film.synopsis, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource ON Contribution.code = Ressource.code JOIN Film 
+    ON Ressource.code = Film.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Realisateur'
+    """
+    cur.execute(sql, [real.lower()])
+    afficherFilms(cur.fetchall())
 
-def chercherLivre(titre, date, auteur):
-    print("recherche du livre ...")
+def chercherLivreByTitre(titre):
+    print("recherche du livre à implémenter")
 
-def chercherMusique(titre, date, duree, auteur):
-    print("recherche de la musique ...")
+def chercherLivreByDate(date):
+    print("recherche du livre à implémenter")
+
+def chercherLivreByAuteur(auteur):
+    print("recherche du livre à implémenter")
+
+def chercherMusiqueByTitre(titre):
+    print("recherche de la musique à implémenter")
+
+def chercherMusiqueByDate(date):
+    print("recherche de la musique à implémenter")
+
+def chercherMusiqueByAuteur(date):
+    print("recherche de la musique à implémenter")
+
+
+def demanderTypeRechercheFilm():
+    choix = int(input("""Choix du type de recherche
+        1. par titre de film
+        2. par date d'apparition du film
+        3. par nom du réalisateur
+        Choix : """))
+    verifierChoix(choix, 3)
+    return choix
+
+def demanderTypeRechercheLivre():
+    choix = int(input("""Choix du type de recherche
+        1. par titre du livre
+        2. par date d'apparition du livre
+        3. par nom de l'auteur
+        Choix : """))
+    verifierChoix(choix, 3)
+    return choix
+
+def demanderTypeRechercheMusique():
+    choix = int(input("""Choix du type de recherche
+        1. par titre de la musique
+        2. par date d'apparition de la musique
+        3. par nom de l'auteur
+        Choix : """))
+    verifierChoix(choix, 3)
+    return choix
 
 def chercherRessource():
     typeRessource = demanderTypeRessource()
-    titreRessource = ""
-    while(titreRessource == ""):
-        titreRessource = input("titre de la ressource (not null): ")
-    dateRessource = input("date d'apparition  (AAAA-MM-JJ) : ")
+    #titreRessource = ""
+    #while(titreRessource == ""):
+    #    titreRessource = input("titre de la ressource (not null): ")
+    #dateRessource = input("date d'apparition  (AAAA-MM-JJ) : ")
     if(typeRessource == "Film"):
-        realisateur = input("nom du réalisateur : ")
-        chercherFilmByTitre(titreRessource)
-    elif(typeRessource == "Livre"):
-        auteur = input("nom de l'auteur : ")
-        chercherLivre(titreRessource, dateRessource, auteur)
-    else:
-        duree = input("durée (en minutes) : ")
-        auteur = input("nom d'un auteur de la musique : ")
-        chercherMusique(titreRessource, dateRessource, duree, auteur)
-    
+        typeRecherche = demanderTypeRechercheFilm()
+        if(typeRecherche == 1):
+            titre = input("titre du film : ")
+            chercherFilmByTitre(titre)
+        elif(typeRecherche == 2):
+            date = input("date d'apparition (AAAA-MM-JJ) : ")
+            chercherFilmByDate(date)
+        else:
+            realisateur = input("nom du réalisateur : ")
+            chercherFilmByRealisateur(realisateur)
 
+    elif(typeRessource == "Livre"):
+        typeRecherche = demanderTypeRechercheLivre()
+        if(typeRecherche == 1):
+            titre = input("titre du livre : ")
+            chercherLivreByTitre(titre)
+        elif(typeRecherche == 2):
+            date = input("date d'apparition (AAAA-MM-JJ) : ")
+            chercherLivreByDate(date)
+        else:
+            auteur = input("nom de l'auteur : ")
+            chercherLivreByAuteur(auteur)
+
+    else:
+        typeRecherche = demanderTypeRechercheMusique()
+        if(typeRecherche == 1):
+            titre = input("titre de la musique : ")
+            chercherMusiqueByTitre(titre)
+        elif(typeRecherche == 2):
+            date = input("date d'apparition (AAAA-MM-JJ) : ")
+            chercherMusiqueByDate(date)
+        else:
+            auteur = input("nom de l'auteur : ")
+            chercherMusiqueByAuteur(auteur)
+    
 
 def menuAdherent():
     choix = int(input("""Menu Adhérent:
