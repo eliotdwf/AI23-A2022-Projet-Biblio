@@ -1,7 +1,7 @@
 # AI23 - Automne 2022 - Projet Biblio
 
 ## Membres du groupe
-- Thibault Chassignet
+- Thibaut Chassignet
 - Eliot Dewulf
 - Théodore Garcher
 - Axel Goret
