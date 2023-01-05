@@ -237,6 +237,21 @@ def chercherRessource():
             chercherMusiqueByAuteur(auteur)
     
 
+def emprunterRessource():
+    print("a implémenter")
+
+def rendreRessource():
+    print("a implémenter")
+
+def afficherEmpruntsEnCours():
+    print("a implémenter")
+
+def afficherSanctions():
+    sql = """
+    SELECT * FROM Degradation D WHERE D.adherent = ?    
+    """
+    print("a implémenter")
+
 def menuAdherent():
     choix = int(input("""Menu Adhérent:
     1. Chercher une ressource
@@ -253,15 +268,15 @@ def menuAdherent():
         print("")
         menuAdherent()
     elif(choix == 2):
-        emprunterRessource()
+        emprunterRessource()    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
         print()
         menuAdherent()
     elif(choix == 3):
-        rendreRessource()
+        rendreRessource()   #détruire la ligne de pret de l'exemplaire emprunté
         print()
         menuAdherent()
     elif(choix == 4):
-        empruntsEnCours()
+        afficherEmpruntsEnCours()
         print()
         menuAdherent()
     elif(choix == 5):
