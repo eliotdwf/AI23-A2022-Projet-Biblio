@@ -41,16 +41,19 @@ def demanderTypeRessource():
         print("ERREUR")
     
 def afficherFilms(raws):
-    for raw in raws:
-        print("{")
-        print("\tcode ressource : %d" % raw[0])
-        print("\ttitre ressource : " + raw[1])
-        print("\tdate apparition : " + raw[2])
-        print("\tgenre : " + raw[3])
-        print("\tlangue : " + raw[4])
-        print("\tsynopsys : " + raw[5])
-        print("\tréalisateur: " + raw[6] + " " + raw[7])
-        print("}")
+    if(raws):
+        for raw in raws:
+            print("{")
+            print("\tcode ressource : %d" % raw[0])
+            print("\ttitre ressource : " + raw[1])
+            print("\tdate apparition : " + raw[2])
+            print("\tgenre : " + raw[3])
+            print("\tlangue : " + raw[4])
+            print("\tsynopsys : " + raw[5])
+            print("\tréalisateur: " + raw[6] + " " + raw[7])
+            print("}")
+    else: 
+        print("Aucun résultat !")
 
 def chercherFilmByTitre(titre):
     sql = """
@@ -79,15 +82,49 @@ def chercherFilmByRealisateur(real):
     cur.execute(sql, [real.lower()])
     afficherFilms(cur.fetchall())
 
+def afficherLivres(raws):
+    if(raws):
+        for raw in raws:
+            print("{")
+            print("\tcode ressource : %d" % raw[0])
+            print("\ttitre ressource : " + raw[1])
+            print("\tdate apparition : " + raw[2])
+            print("\téditeur : " + raw[3])
+            print("\tgenre : " + raw[4])
+            print("\tlangue : " + raw[5])
+            print("\trésumé : " + raw[6])
+            print("\tauteur: " + raw[7] + " " + raw[8])
+            print("}")
+    else: 
+        print("Aucun résultat !")
+
 def chercherLivreByTitre(titre):
-    print("recherche du livre à implémenter")
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Livre L ON R.code = L.id WHERE LOWER(R.titre) = ? AND Contribution.type = 'Auteur'
+    """
+    cur.execute(sql, [titre.lower()])
+    afficherLivres(cur.fetchall())
 
 
 def chercherLivreByDate(date):
-    print("recherche du livre à implémenter")
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Livre L ON R.code = L.id WHERE R.dateApparition = ? AND Contribution.type = 'Auteur'
+    """
+    cur.execute(sql, [date])
+    afficherLivres(cur.fetchall())
 
 def chercherLivreByAuteur(auteur):
-    print("recherche du livre à implémenter")
+    sql = """
+    SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Livre L ON R.code = L.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Auteur'
+    """
+    cur.execute(sql, [auteur.lower()])
+    afficherLivres(cur.fetchall())
 
 def afficherMusiques(raws):
     if(raws):
