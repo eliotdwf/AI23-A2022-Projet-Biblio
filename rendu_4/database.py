@@ -54,28 +54,27 @@ def afficherFilms(raws):
 
 def chercherFilmByTitre(titre):
     sql = """
-    SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, Ressource.genre, Film.langue, Film.synopsis, Contributeur.nom, Contributeur.prenom 
-    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id 
-    JOIN Ressource ON Contribution.code = Ressource.code JOIN Film ON Ressource.code = Film.id 
-    WHERE LOWER(Ressource.titre) = ? AND Contribution.type = 'Realisateur'
+    SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Film F ON R.code = F.id WHERE LOWER(R.titre) = ? AND Contribution.type = 'Realisateur'
     """
     cur.execute(sql, [titre.lower()])
     afficherFilms(cur.fetchall())
     
 def chercherFilmByDate(date):
     sql = """
-    SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, Ressource.genre, Film.langue, Film.synopsis, Contributeur.nom, Contributeur.prenom 
-    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource ON Contribution.code = Ressource.code JOIN Film ON Ressource.code = Film.id 
-    WHERE Ressource.dateApparition = ? AND Contribution.type = 'Realisateur'
+    SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Film F ON R.code = F.id WHERE R.dateApparition = ? AND Contribution.type = 'Realisateur'
     """
     cur.execute(sql, [date])
     afficherFilms(cur.fetchall())
 
 def chercherFilmByRealisateur(real):
     sql = """
-    SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, Ressource.genre, Film.langue, Film.synopsis, Contributeur.nom, Contributeur.prenom 
-    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource ON Contribution.code = Ressource.code JOIN Film 
-    ON Ressource.code = Film.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Realisateur'
+    SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
+    FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Film F ON R.code = F.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Realisateur'
     """
     cur.execute(sql, [real.lower()])
     afficherFilms(cur.fetchall())
@@ -128,10 +127,6 @@ def demanderTypeRechercheMusique():
 
 def chercherRessource():
     typeRessource = demanderTypeRessource()
-    #titreRessource = ""
-    #while(titreRessource == ""):
-    #    titreRessource = input("titre de la ressource (not null): ")
-    #dateRessource = input("date d'apparition  (AAAA-MM-JJ) : ")
     if(typeRessource == "Film"):
         typeRecherche = demanderTypeRechercheFilm()
         if(typeRecherche == 1):
