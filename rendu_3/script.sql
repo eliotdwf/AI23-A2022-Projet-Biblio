@@ -252,3 +252,4 @@ INSERT INTO Pret VALUES(18,'jdoe','2016-11-15',7);
 -- Retards/Degradations
 INSERT INTO Retard VALUES(1, '2022-02-22', 7, 'tgarcher');
 INSERT INTO Degradation VALUES(1, false, 'tgarcher');
+INSERT INTO degradation VALUES (2, True, 'jdoe');

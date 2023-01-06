@@ -6,7 +6,6 @@ conn = sqlite3.connect("../database.db")
 cur = conn.cursor()
 
 isAdherent = False
-login = ""
 
 
 def verifierChoix(choix, borneMax):
@@ -246,20 +245,50 @@ def rendreRessource():
 def afficherEmpruntsEnCours():
     print("a implémenter")
 
-def afficherSanctions():
-    sql = """
-    SELECT * FROM Degradation D WHERE D.adherent = ?    
-    """
-    print("a implémenter")
+def afficherDegradations(login):
+    sql = "SELECT * FROM Degradation WHERE adherent = ?"
+    cur.execute(sql, [login])
+    raws = cur.fetchall()
+    if(raws):    
+        print("Dégradations (%d):" % len(raws))
+        for raw in raws:
+            if(raw[1]):
+                remboursementFait = "oui"
+            else: 
+                remboursementFait = "non"
+            print("\t- remboursement effectué ? " + remboursementFait)
+    else:
+        print("Aucune dégradation pour l'utilisateur " + login)
+        
 
-def menuAdherent():
+def afficherRetards(login):
+    sql = "SELECT * FROM Retard WHERE adherent = ?"
+    cur.execute(sql, [login])
+    raws = cur.fetchall()
+    if(raws):    
+        print("Retards (%d):" % len(raws))
+        for raw in raws:
+            print("\t{")
+            print("\t\t- Date début suspension : " + raw[1])
+            print("\t\t- Nombre de jours de retard : %d" % raw[2])
+            print("\t}")
+    else:
+        print("Aucun retard pour l'utilisateur " + login)
+
+
+def afficherSanctions(login):
+    afficherDegradations(login)
+    afficherRetards(login)
+
+def menuAdherent(login):
     choix = int(input("""Menu Adhérent:
     1. Chercher une ressource
     2. Emprunter une ressource
     3. Rendre une ressource
     4. Voir mes ressources en cours d'emprunt
     5. Voir mes sanctions
-    6. Quitter\nChoix : """))
+    6. Quitter
+    Choix : """))
 
     verifierChoix(choix, 6)
 
@@ -272,15 +301,15 @@ def menuAdherent():
         print()
         menuAdherent()
     elif(choix == 3):
-        rendreRessource()   #détruire la ligne de pret de l'exemplaire emprunté
+        rendreRessource()   # détruire la ligne de pret de l'exemplaire emprunté, vérifier l'état et la date de rendu pour voir si il faut ajouter des sanctions
         print()
         menuAdherent()
     elif(choix == 4):
-        afficherEmpruntsEnCours()
+        afficherEmpruntsEnCours()   
         print()
         menuAdherent()
     elif(choix == 5):
-        afficherSanctions()
+        afficherSanctions(login)
     
 
 
@@ -290,13 +319,12 @@ def connexion_compte():
     pwd = input("mot de passe: ")
     if(estAdherent(login, pwd)):
         isAdherent = True
-        menuAdherent()
+        menuAdherent(login)
     elif(estPersonnel(login, pwd)):
-        #menu_personnel()
-        print("Personnel")
+        print("menu du personnel à implémenter")
     else:
         print("Aucun utilisateur ne correspond dans la base de donnée !\nVeuillez réessayer (Ctrl+C pour quitter)\n")
         connexion_compte()
 
 
-chercherRessource()
+connexion_compte()
