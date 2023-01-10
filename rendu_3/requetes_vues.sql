@@ -44,3 +44,9 @@ FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id
                   JOIN Ressource ON Contribution.code = Ressource.code 
                   JOIN Film ON Ressource.code = Film.id 
 WHERE Contribution.type = "Realisateur"
+
+-- Dernière ressource empruntée par un adhérent
+SELECT Ressource.code, Ressource.titre ,Pret.adherent, max(Pret.date_emprunt) AS "Date d'emprunt", Pret.duree
+FROM Pret JOIN Exemplaire ON Pret.exemplaire = Exemplaire.id
+          JOIN Ressource ON Exemplaire.code = Ressource.code
+GROUP BY Pret.adherent;
