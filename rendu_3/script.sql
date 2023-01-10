@@ -55,7 +55,7 @@ CREATE TABLE Exemplaire(
 CREATE TABLE Pret(
     exemplaire INTEGER,
     adherent VARCHAR,
-    date_emprunt DATE,
+    date_emprunt DATE NOT NULL,
     duree INTEGER NOT NULL,
     PRIMARY KEY(exemplaire,adherent,date_emprunt),
     FOREIGN KEY(exemplaire) REFERENCES Exemplaire(id),
@@ -247,6 +247,9 @@ INSERT INTO Pret VALUES(16,'jdoe','2016-10-16',7);
 INSERT INTO Pret VALUES(17,'jdoe','2016-10-30',7);
 INSERT INTO Pret VALUES(18,'jdoe','2016-11-13',7);
 INSERT INTO Pret VALUES(18,'jdoe','2016-11-15',7);
+INSERT INTO Pret VALUES(1,'tgarcher','2023-01-10',7);
+INSERT INTO Pret VALUES(13,'jdoe','2023-01-10',7);
+
 
 
 -- Retards/Degradations

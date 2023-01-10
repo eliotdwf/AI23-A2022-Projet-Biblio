@@ -135,6 +135,7 @@ def afficherMusiques(raws):
             print("\tgenre : " + raw[3])
             print("\tlongueur (en secondes) : %d" % raw[4])
             print("\tauteur : " + raw[5] + " " + raw[6] + " (" + raw[7] + ")")
+            print("}")
     else:
         print("Aucun résultat !")
     
@@ -242,8 +243,36 @@ def emprunterRessource():
 def rendreRessource():
     print("a implémenter")
 
-def afficherEmpruntsEnCours():
-    print("a implémenter")
+    
+
+
+def afficherEmpruntsEnCours(login):
+    # attention, modifs a faire pour une bd différente de sqlite
+    sql = """SELECT R.code, R.titre, R.dateApparition, Contributeur.nom, Contributeur.prenom, Contribution.type, P.date_emprunt, P.duree
+    FROM Contributeur 
+    JOIN Contribution ON Contributeur.id = Contribution.id 
+    JOIN Ressource R ON Contribution.code = R.code 
+    JOIN Exemplaire E ON E.code = R.code
+    JOIN Pret P ON P.exemplaire = E.id
+    WHERE date(P.date_emprunt, P.duree || ' days') > strftime('%Y-%m-%d','now') AND P.adherent = ? 
+    AND Contribution.type <> 'Acteur' """ 
+    # remplacer les fonctions pour le calcul de la date
+    # cf https://librecours.net/module/bdd0/fonctions/pres/co/date.html?mode=html et fonciton now() 
+
+    cur.execute(sql, [login])
+    raws = cur.fetchall()
+    if(raws):
+        for raw in raws:
+            print("{")
+            print("\tcode ressource : %d" % raw[0])
+            print("\ttitre ressource : " + raw[1])
+            print("\tdate apparition : " + raw[2])
+            print("\tcontributeur : " + raw[3] + " " + raw[4] + " (" + raw[5] + ")")
+            print("\tdate emprunt : " + raw[6])
+            print("\tdurée de l'emprunt : %d" % raw[7])
+            print("}")
+    else:
+        print("Aucun emprunt en cours !")
 
 def afficherDegradations(login):
     sql = "SELECT * FROM Degradation WHERE adherent = ?"
@@ -280,6 +309,8 @@ def afficherSanctions(login):
     afficherDegradations(login)
     afficherRetards(login)
 
+
+
 def menuAdherent(login):
     choix = int(input("""Menu Adhérent:
     1. Chercher une ressource
@@ -295,21 +326,23 @@ def menuAdherent(login):
     if(choix == 1):
         chercherRessource()
         print("")
-        menuAdherent()
+        menuAdherent(login)
     elif(choix == 2):
         emprunterRessource()    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
         print()
-        menuAdherent()
+        menuAdherent(login)
     elif(choix == 3):
         rendreRessource()   # détruire la ligne de pret de l'exemplaire emprunté, vérifier l'état et la date de rendu pour voir si il faut ajouter des sanctions
         print()
-        menuAdherent()
+        menuAdherent(login)
     elif(choix == 4):
-        afficherEmpruntsEnCours()   
+        afficherEmpruntsEnCours(login)   
         print()
-        menuAdherent()
+        menuAdherent(login)
     elif(choix == 5):
         afficherSanctions(login)
+        print()
+        menuAdherent(login)
     
 
 
