@@ -32,3 +32,15 @@ GROUP BY v_nb_emprunts_par_ressource.code, v_nb_emprunts_par_ressource.titre;
 SELECT max(nb_emprunts), nom, prenom
 FROM v_nb_emprunts_par_adherent
 GROUP BY v_nb_emprunts_par_adherent.nom, v_nb_emprunts_par_adherent.prenom;
+
+-- enregistrements musicaux plus long que 200 secondes
+SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, EnregistrementMusical.longueur
+FROM EnregistrementMusical JOIN Ressource ON Ressource.code = EnregistrementMusical.id 
+WHERE EnregistrementMusical.longueur >= 200;
+
+-- Toutes les ressources ayant un contributeur de type Réalisateur
+SELECT Ressource.code, Ressource.titre, Ressource.dateApparition, Ressource.genre, Film.langue, Film.synopsis, Contributeur.nom, Contributeur.prenom 
+FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id 
+                  JOIN Ressource ON Contribution.code = Ressource.code 
+                  JOIN Film ON Ressource.code = Film.id 
+WHERE Contribution.type = "Realisateur"
