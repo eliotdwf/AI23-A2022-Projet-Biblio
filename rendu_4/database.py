@@ -408,7 +408,15 @@ def afficherSanctions(login):
     afficherDegradations(login)
     afficherRetards(login)
 
+def desactiverCompte(login):
+    sql = "UPDATE Adherent SET carte_active = false WHERE login = ?"
+    cur.execute(sql, login)
+    conn.commit()
 
+def activerCompte(login):
+    sql = "UPDATE Adherent SET carte_active = true WHERE login = ?"
+    cur.execute(sql, login)
+    conn.commit()
 
 def menuAdherent(login):
     choix = int(input("""Menu Adhérent:
@@ -443,7 +451,33 @@ def menuAdherent(login):
         print()
         menuAdherent(login)
     
+def menuPersonnel(login):
+    choix = int(input("""Menu Personnel:
+    1. Voir emprunts en cours d'un utilisateur
+    2. Voir sanctions d'un utilisateur
+    3. Désactiver un compte utilisateur
+    4. Activer un compte utilisateur
+    5. Quitter
+    Choix : """))
 
+    verifierChoix(choix, 5)
+
+    if(choix == 1):
+        afficherEmpruntsEnCours(input("Login de l'utilisateur : "))
+        print("")
+        menuPersonnel(login)
+    elif(choix == 2):
+        afficherSanctions(input("Login de l'utilisateur : "))    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
+        print()
+        menuPersonnel(login)
+    elif(choix == 3):
+        desactiverCompte(input("Login de l'utilisateur : "))
+        print()
+        menuPersonnel(login)
+    elif(choix == 4):
+        activerCompte(input("Login de l'utilisateur : "))
+        print()
+        menuPersonnel(login)
 
 
 def connexion_compte():
@@ -453,7 +487,7 @@ def connexion_compte():
         isAdherent = True
         menuAdherent(login)
     elif(estPersonnel(login, pwd)):
-        print("menu du personnel à implémenter")
+        menuPersonnel(login)
     else:
         print("Aucun utilisateur ne correspond dans la base de donnée !\nVeuillez réessayer (Ctrl+C pour quitter)\n")
         connexion_compte()
