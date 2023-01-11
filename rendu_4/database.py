@@ -310,19 +310,15 @@ def afficherEmpruntsEnCours(login):
         print("Aucun emprunt en cours !")
 
 def afficherDegradations(login):
-    sql = "SELECT * FROM Degradation WHERE adherent = ?"
+    sql = "SELECT count(*) FROM Degradation WHERE adherent = ? AND remboursementFait = false"
     cur.execute(sql, [login])
-    raws = cur.fetchall()
-    if(raws):    
-        print("Dégradations (%d):" % len(raws))
-        for raw in raws:
-            if(raw[1]):
-                remboursementFait = "oui"
-            else: 
-                remboursementFait = "non"
-            print("\t- remboursement effectué ? " + remboursementFait)
-    else:
-        print("Aucune dégradation pour l'utilisateur " + login)
+    result = cur.fetchone()
+    print("Dégradations non remboursées : %d" % result[0])
+
+    sql = "SELECT count(*) FROM Degradation WHERE adherent = ? AND remboursementFait = true"
+    cur.execute(sql, [login])
+    result = cur.fetchall()
+    print("Dégradations remboursées : %d" % result[0])
         
 
 def afficherRetards(login):
