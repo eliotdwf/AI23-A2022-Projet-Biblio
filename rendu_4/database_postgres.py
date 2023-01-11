@@ -19,8 +19,8 @@ def estAdherent(login, pwd):
     return cur.fetchone()
 
 def estPersonnel(login, pwd):
-    requete = "Select 1 from personnel where login = ? and mdp = ?"
-    cur.execute(requete, (login, pwd))
+    requete = "Select 1 from personnel where login = '%s' and mdp = '%s'" % (login, pwd)
+    cur.execute(requete)
     return cur.fetchone()
 
 
@@ -55,30 +55,32 @@ def afficherFilms(raws):
         print("Aucun résultat !")
 
 def chercherFilmByTitre(titre):
+    titre = titre.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Film F ON R.code = F.id WHERE LOWER(R.titre) = ? AND Contribution.type = 'Realisateur'
-    """
-    cur.execute(sql, [titre.lower()])
+    JOIN Film F ON R.code = F.id WHERE LOWER(R.titre) = '%s' AND Contribution.type = 'Realisateur'
+    """ % titre
+    cur.execute(sql)
     afficherFilms(cur.fetchall())
 
 def chercherFilmByDate(date):
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Film F ON R.code = F.id WHERE R.dateApparition = ? AND Contribution.type = 'Realisateur'
-    """
-    cur.execute(sql, [date])
+    JOIN Film F ON R.code = F.id WHERE R.dateApparition = '%s' AND Contribution.type = 'Realisateur'
+    """ % date
+    cur.execute(sql)
     afficherFilms(cur.fetchall())
 
 def chercherFilmByRealisateur(real):
+    real = real.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.genre, F.langue, F.synopsis, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Film F ON R.code = F.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Realisateur'
-    """
-    cur.execute(sql, [real.lower()])
+    JOIN Film F ON R.code = F.id WHERE LOWER(Contributeur.nom) = '%s' AND Contribution.type = 'Realisateur'
+    """ % real
+    cur.execute(sql)
     afficherFilms(cur.fetchall())
 
 def afficherLivres(raws):
@@ -98,12 +100,13 @@ def afficherLivres(raws):
         print("Aucun résultat !")
 
 def chercherLivreByTitre(titre):
+    titre = titre.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Livre L ON R.code = L.id WHERE LOWER(R.titre) = ? AND Contribution.type = 'Auteur'
-    """
-    cur.execute(sql, [titre.lower()])
+    JOIN Livre L ON R.code = L.id WHERE LOWER(R.titre) = '%s' AND Contribution.type = 'Auteur'
+    """ % titre
+    cur.execute(sql)
     afficherLivres(cur.fetchall())
 
 
@@ -111,18 +114,19 @@ def chercherLivreByDate(date):
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Livre L ON R.code = L.id WHERE R.dateApparition = ? AND Contribution.type = 'Auteur'
-    """
-    cur.execute(sql, [date])
+    JOIN Livre L ON R.code = L.id WHERE R.dateApparition = '%s' AND Contribution.type = 'Auteur'
+    """ % date
+    cur.execute(sql)
     afficherLivres(cur.fetchall())
 
 def chercherLivreByAuteur(auteur):
+    auteur = auteur.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.editeur, R.genre, L.langue, L.resume, Contributeur.nom, Contributeur.prenom 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
-    JOIN Livre L ON R.code = L.id WHERE LOWER(Contributeur.nom) = ? AND Contribution.type = 'Auteur'
-    """
-    cur.execute(sql, [auteur.lower()])
+    JOIN Livre L ON R.code = L.id WHERE LOWER(Contributeur.nom) = '%s' AND Contribution.type = 'Auteur'
+    """ % auteur
+    cur.execute(sql)
     afficherLivres(cur.fetchall())
 
 def afficherMusiques(raws):
@@ -141,13 +145,14 @@ def afficherMusiques(raws):
 
 
 def chercherMusiqueByTitre(titre):
+    titre = titre.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type 
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
     JOIN EnregistrementMusical EM ON R.code = EM.id 
-    WHERE LOWER(R.titre) = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
-    """
-    cur.execute(sql, [titre.lower()])
+    WHERE LOWER(R.titre) = '%s' AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """ % titre
+    cur.execute(sql)
     afficherMusiques(cur.fetchall())
 
 def chercherMusiqueByDate(date):
@@ -155,19 +160,20 @@ def chercherMusiqueByDate(date):
     SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
     JOIN EnregistrementMusical EM ON R.code = EM.id 
-    WHERE R.dateApparition = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
-    """
-    cur.execute(sql, [date])
+    WHERE R.dateApparition = '%s' AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """ % date
+    cur.execute(sql)
     afficherMusiques(cur.fetchall())
 
 def chercherMusiqueByAuteur(auteur):
+    auteur = auteur.lower()
     sql = """
     SELECT R.code, R.titre, R.dateApparition, R.genre, EM.longueur, Contributeur.nom, Contributeur.prenom, Contribution.type
     FROM Contributeur JOIN Contribution ON Contributeur.id = Contribution.id JOIN Ressource R ON Contribution.code = R.code 
     JOIN EnregistrementMusical EM ON R.code = EM.id 
-    WHERE LOWER(Contributeur.nom) = ? AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
-    """
-    cur.execute(sql, [auteur.lower()])
+    WHERE LOWER(Contributeur.nom) = '%s' AND (Contribution.type = 'Compositeur' OR Contribution.type = 'Interprete')
+    """ % auteur
+    cur.execute(sql)
     afficherMusiques(cur.fetchall())
 
 
@@ -237,11 +243,121 @@ def chercherRessource():
             chercherMusiqueByAuteur(auteur)
 
 
-def emprunterRessource():
-    print("a implémenter")
+def emprunterLivre(login, titre):
+    titre = titre.lower()
+    # on part du principe qu'il n'y a pas deux livres avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE c.type = 'Auteur' AND e.etat != 'Perdu' AND LOWER(r.titre) = '%s' AND p.date_retour IS NOT NULL""" % titre
+    cur.execute(sql)
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour le livre intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES('%s', '%s', date('now'), 7, NULL)" % (exemplaire, login)
+        cur.execute(sql)
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
 
-def rendreRessource():
-    print("a implémenter")
+def emprunterFilm(login, titre):
+    titre = titre.lower()
+    # on part du principe qu'il n'y a pas deux films avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE c.type = 'Realisateur' AND e.etat != 'Perdu' AND LOWER(r.titre) = '%s' AND p.date_retour IS NOT NULL""" % titre
+    cur.execute(sql)
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour le film intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES('%s', '%s', date('now'), 7, NULL)" % (exemplaire, login)
+        cur.execute(sql)
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
+
+def emprunterMusique(login, titre):
+    titre = titre.lower()
+    # on part du principe qu'il n'y a pas deux musiques avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE (c.type = 'Interprete' OR c.type='Compositeur') AND e.etat != 'Perdu' AND LOWER(r.titre) = '%s' AND p.date_retour IS NOT NULL""" % titre
+    cur.execute(sql)
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour la musiquee intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES('%s', '%s', date('now'), 7, NULL)" % (exemplaire, login)
+        cur.execute(sql)
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
+
+def emprunterRessource(login):
+    typeEmprunt = input("Veuillez saisir le type de ressource que vous souhaitez emprunter ('L':Livre, 'F':Film, 'M':Musique) : ")
+    titre = input("Veuillez saisir le nom de la ressource que vous souhaitez emprunter: ")
+    if(typeEmprunt == 'L'):
+        emprunterLivre(login, titre)
+    elif(typeEmprunt == 'F'):
+        emprunterFilm(login, titre)
+    elif(typeEmprunt == 'M'):
+        emprunterMusique(login, titre)
+    else:
+        emprunterRessource(login)
+
+def creerDegradation(login):
+    # on cherche le premier id disponible pour une nouvelle dégradation
+    sql = "SELECT count(*) from degradation"
+    cur.execute(sql)
+    raw = cur.fetchone()
+    firstIdAvailable = raw[0] + 1
+
+    # on ajoute la dégradation
+    sql = "INSERT INTO Degradation VALUES('%s', false, '%s')" % (firstIdAvailable, login)
+    cur.execute(sql)
+    conn.commit()
+    print("Une sanction de type \"dégradation\" ajoutée pour l'utilisateur " + login)
+
+def rendreRessource(login):
+    print("Retour d'une ressource.\nEn cas d'oubli des infos concernant la ressource, retourner au menu et selectionner l'option \"Voir mes ressources en cours d'emprunt\"")
+    titre = input("Veuillez saisir le nom de la ressource que vous souhaitez rendre : ")
+    nouvelEtat = input("Veuillez saisir l'état de la ressource rendue ('N':neuf, 'B':bon, 'A':abimé, 'P':perdu) : ")
+    dateEmprunt = input("Veuillez saisir la date de l'emprunt (AAA-MM-JJ) : ")
+
+    #on récupère l'id et l'ancien etat de l'examplaire
+    titre = titre.lower()
+    sql = """SELECT e.id, e.etat FROM Pret p JOIN exemplaire e ON e.id = p.exemplaire 
+    NATURAL JOIN Ressource r WHERE p.date_emprunt = '%s' AND p.adherent = '%s' AND LOWER(r.titre) = '%s'""" % (dateEmprunt, login, titre)
+    cur.execute(sql)
+    raws = cur.fetchall()
+    if(len(raws) != 1):
+        print("Erreur, il ne devrait y avoir qu'un seul resultat a la requete !")
+        exit(1)
+    exemplaire = raws[0][0]
+    ancienEtat = raws[0][1]
+    if((ancienEtat=="Neuf" or ancienEtat=="Bon") and (nouvelEtat=="A")):
+        creerDegradation(login)
+    if(nouvelEtat=="P"):
+        creerDegradation(login)
+
+    #On met a jour l'état de l'exemplaire
+    if(nouvelEtat == 'A'):
+        sql = "UPDATE Exemplaire SET etat = 'Abime' WHERE id = '%s'" % exemplaire
+        cur.execute(sql)
+    if(nouvelEtat == 'N'):
+        sql = "UPDATE Exemplaire SET etat = 'Neuf' WHERE id = '%s'" % exemplaire
+        cur.execute(sql)
+    if(nouvelEtat == 'P'):
+        sql = "UPDATE Exemplaire SET etat = 'Perdu' WHERE id = '%s'" % exemplaire
+        cur.execute(sql)
+    if(nouvelEtat == 'B'):
+        sql = "UPDATE Exemplaire SET etat = 'Bon' WHERE id = '%s'" % exemplaire
+        cur.execute(sql)
+    conn.commit()
+
+    #on met a jour la date retour du pret
+    sql = "UPDATE Pret SET date_retour = date('now') WHERE date_emprunt = '%s' AND adherent = '%s' AND exemplaire = '%s'" % (dateEmprunt, login, exemplaire)
+    cur.execute(sql)
+    conn.commit()
+    print("Retour de la ressource effectué avec succès")
 
 
 
@@ -254,12 +370,13 @@ def afficherEmpruntsEnCours(login):
     JOIN Ressource R ON Contribution.code = R.code 
     JOIN Exemplaire E ON E.code = R.code
     JOIN Pret P ON P.exemplaire = E.id
-    WHERE date(P.date_emprunt, P.duree || ' days') > strftime('%Y-%m-%d','now') AND P.adherent = ? 
-    AND Contribution.type <> 'Acteur' """
+    WHERE date_retour IS NULL AND P.adherent = '%s' 
+    AND Contribution.type <> 'Acteur' """ % login
+    # date(P.date_emprunt, P.duree || ' days') > strftime('%Y-%m-%d','now')
     # remplacer les fonctions pour le calcul de la date
     # cf https://librecours.net/module/bdd0/fonctions/pres/co/date.html?mode=html et fonciton now()
 
-    cur.execute(sql, [login])
+    cur.execute(sql)
     raws = cur.fetchall()
     if(raws):
         for raw in raws:
@@ -275,24 +392,20 @@ def afficherEmpruntsEnCours(login):
         print("Aucun emprunt en cours !")
 
 def afficherDegradations(login):
-    sql = "SELECT * FROM Degradation WHERE adherent = ?"
-    cur.execute(sql, [login])
-    raws = cur.fetchall()
-    if(raws):
-        print("Dégradations (%d):" % len(raws))
-        for raw in raws:
-            if(raw[1]):
-                remboursementFait = "oui"
-            else:
-                remboursementFait = "non"
-            print("\t- remboursement effectué ? " + remboursementFait)
-    else:
-        print("Aucune dégradation pour l'utilisateur " + login)
+    sql = "SELECT count(*) FROM Degradation WHERE adherent = '%s' AND remboursementFait = false" % login
+    cur.execute(sql)
+    result = cur.fetchone()
+    print("Dégradations non remboursées : %d" % result[0])
+
+    sql = "SELECT count(*) FROM Degradation WHERE adherent = '%s' AND remboursementFait = true" % login
+    cur.execute(sql)
+    result = cur.fetchall()
+    print("Dégradations remboursées : %d" % result[0])
 
 
 def afficherRetards(login):
-    sql = "SELECT * FROM Retard WHERE adherent = ?"
-    cur.execute(sql, [login])
+    sql = "SELECT * FROM Retard WHERE adherent = '%s'" % login
+    cur.execute(sql)
     raws = cur.fetchall()
     if(raws):
         print("Retards (%d):" % len(raws))
@@ -309,7 +422,15 @@ def afficherSanctions(login):
     afficherDegradations(login)
     afficherRetards(login)
 
+def desactiverCompte(login):
+    sql = "UPDATE Adherent SET carte_active = false WHERE login = '%s'" % login
+    cur.execute(sql)
+    conn.commit()
 
+def activerCompte(login):
+    sql = "UPDATE Adherent SET carte_active = true WHERE login = '%s'" % login
+    cur.execute(sql)
+    conn.commit()
 
 def menuAdherent(login):
     choix = int(input("""Menu Adhérent:
@@ -328,11 +449,11 @@ def menuAdherent(login):
         print("")
         menuAdherent(login)
     elif(choix == 2):
-        emprunterRessource()    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
+        emprunterRessource(login)    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
         print()
         menuAdherent(login)
     elif(choix == 3):
-        rendreRessource()   # détruire la ligne de pret de l'exemplaire emprunté, vérifier l'état et la date de rendu pour voir si il faut ajouter des sanctions
+        rendreRessource(login)
         print()
         menuAdherent(login)
     elif(choix == 4):
@@ -347,6 +468,35 @@ def menuAdherent(login):
 
 
 
+def menuPersonnel(login):
+    choix = int(input("""Menu Personnel:
+    1. Voir emprunts en cours d'un utilisateur
+    2. Voir sanctions d'un utilisateur
+    3. Désactiver un compte utilisateur
+    4. Activer un compte utilisateur
+    5. Quitter
+    Choix : """))
+
+    verifierChoix(choix, 5)
+
+    if(choix == 1):
+        afficherEmpruntsEnCours(input("Login de l'utilisateur : "))
+        print("")
+        menuPersonnel(login)
+    elif(choix == 2):
+        afficherSanctions(input("Login de l'utilisateur : "))    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
+        print()
+        menuPersonnel(login)
+    elif(choix == 3):
+        desactiverCompte(input("Login de l'utilisateur : "))
+        print()
+        menuPersonnel(login)
+    elif(choix == 4):
+        activerCompte(input("Login de l'utilisateur : "))
+        print()
+        menuPersonnel(login)
+
+
 def connexion_compte():
     login = input("Connexion\nlogin : ")
     pwd = input("mot de passe: ")
@@ -354,7 +504,7 @@ def connexion_compte():
         isAdherent = True
         menuAdherent(login)
     elif(estPersonnel(login, pwd)):
-        print("menu du personnel à implémenter")
+        menuPersonnel(login)
     else:
         print("Aucun utilisateur ne correspond dans la base de donnée !\nVeuillez réessayer (Ctrl+C pour quitter)\n")
         connexion_compte()

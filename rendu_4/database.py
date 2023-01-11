@@ -287,9 +287,9 @@ def emprunterRessource(login):
     if(typeEmprunt == 'L'):
         emprunterLivre(login, titre)
     elif(typeEmprunt == 'F'):
-        emprunterFilm(login)
+        emprunterFilm(login, titre)
     elif(typeEmprunt == 'M'):
-        emprunterMusique()
+        emprunterMusique(login, titre)
     else:
         emprunterRessource(login)
 
