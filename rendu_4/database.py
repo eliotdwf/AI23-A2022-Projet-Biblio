@@ -236,16 +236,71 @@ def chercherRessource():
             auteur = input("nom de fammille de l'auteur : ")
             chercherMusiqueByAuteur(auteur)
     
+def emprunterLivre(login, titre):
+    # on part du principe qu'il n'y a pas deux livres avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE c.type = 'Auteur' AND e.etat != 'Perdu' AND LOWER(r.titre) = ? AND p.date_retour IS NOT NULL"""
+    cur.execute(sql, [titre.lower()])
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour le livre intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES(?, ?, date('now'), 7, NULL)"
+        cur.execute(sql, (exemplaire, login))
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
 
-def emprunterRessource():
-    print("a implémenter")
+def emprunterFilm(login, titre):
+    # on part du principe qu'il n'y a pas deux films avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE c.type = 'Realisateur' AND e.etat != 'Perdu' AND LOWER(r.titre) = ? AND p.date_retour IS NOT NULL"""
+    cur.execute(sql, [titre.lower()])
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour le film intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES(?, ?, date('now'), 7, NULL)"
+        cur.execute(sql, (exemplaire, login))
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
+
+def emprunterMusique(login, titre):
+    # on part du principe qu'il n'y a pas deux musiques avec le même titre
+    sql = """SELECT e.id FROM exemplaire e NATURAL JOIN RESSOURCE r JOIN Contribution c ON r.code = c.code JOIN Pret p ON e.id = p.exemplaire
+    WHERE (c.type = 'Interprete' OR c.type='Compositeur') AND e.etat != 'Perdu' AND LOWER(r.titre) = ? AND p.date_retour IS NOT NULL"""
+    cur.execute(sql, [titre.lower()])
+    raw = cur.fetchone()
+    if(len(raw) == 0):
+        print("Erreur : aucun exemplaire n'est disponible pour la musiquee intitulé " + titre)
+    else:
+        exemplaire = raw[0]
+        sql = "INSERT INTO Pret VALUES(?, ?, date('now'), 7, NULL)"
+        cur.execute(sql, (exemplaire, login))
+        conn.commit()
+        print("Emprunt enregistré, veuillez le rendre dans 7 jours")
+
+def emprunterRessource(login):
+    typeEmprunt = input("Veuillez saisir le type de ressource que vous souhaitez emprunter ('L':Livre, 'F':Film, 'M':Musique) : ")
+    titre = input("Veuillez saisir le nom de la ressource que vous souhaitez emprunter: ")
+    if(typeEmprunt == 'L'):
+        emprunterLivre(login, titre)
+    elif(typeEmprunt == 'F'):
+        emprunterFilm(login)
+    elif(typeEmprunt == 'M'):
+        emprunterMusique()
+    else:
+        emprunterRessource(login)
 
 def creerDegradation(login):
+    # on cherche le premier id disponible pour une nouvelle dégradation
     sql = "SELECT count(*) from degradation"
     cur.execute(sql)
     raw = cur.fetchone()
     firstIdAvailable = raw[0] + 1
 
+    # on ajoute la dégradation
     sql = "INSERT INTO Degradation VALUES(?, false, ?)"
     cur.execute(sql, (firstIdAvailable, login))
     conn.commit()
@@ -271,7 +326,20 @@ def rendreRessource(login):
         creerDegradation(login)
     if(nouvelEtat=="P"):
         creerDegradation(login)
+            
+    #On met a jour l'état de l'exemplaire
+    sql = "UPDATE Exemplaire SET etat = ? WHERE id = ?"
+    if(nouvelEtat == 'A'):
+        cur.execute(sql, ("Abime", exemplaire))
+    if(nouvelEtat == 'N'):
+        cur.execute(sql, ("Neuf", exemplaire))
+    if(nouvelEtat == 'P'):
+        cur.execute(sql, ("Perdu", exemplaire))
+    if(nouvelEtat == 'B'):
+        cur.execute(sql, ("Bon", exemplaire))
+    conn.commit()
 
+    #on met a jour la date retour du pret
     sql = "UPDATE Pret SET date_retour = date('now') WHERE date_emprunt = ? AND adherent = ? AND exemplaire = ?"
     cur.execute(sql, (dateEmprunt, login, exemplaire))
     conn.commit()
@@ -359,7 +427,7 @@ def menuAdherent(login):
         print("")
         menuAdherent(login)
     elif(choix == 2):
-        emprunterRessource()    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
+        emprunterRessource(login)    # vérifier qu'il reste des exemplaires disponibles pour pouvoir emprunter la ressource
         print()
         menuAdherent(login)
     elif(choix == 3):
