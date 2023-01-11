@@ -298,7 +298,7 @@ def emprunterRessource(login):
 
 def checkCompteActif(login):
     requete = "Select 1 from Adherent where login = ? and carte_active = true"
-    cur.execute(requete, login)
+    cur.execute(requete, [login])
     return cur.fetchone()
 
 def creerDegradation(login):
@@ -418,12 +418,12 @@ def afficherSanctions(login):
 
 def desactiverCompte(login):
     sql = "UPDATE Adherent SET carte_active = false WHERE login = ?"
-    cur.execute(sql, login)
+    cur.execute(sql, [login])
     conn.commit()
 
 def activerCompte(login):
     sql = "UPDATE Adherent SET carte_active = true WHERE login = ?"
-    cur.execute(sql, login)
+    cur.execute(sql, [login])
     conn.commit()
 
 def menuAdherent(login):
