@@ -240,8 +240,42 @@ def chercherRessource():
 def emprunterRessource():
     print("a implémenter")
 
-def rendreRessource():
-    print("a implémenter")
+def creerDegradation(login):
+    sql = "SELECT count(*) from degradation"
+    cur.execute(sql)
+    raw = cur.fetchone()
+    firstIdAvailable = raw[0] + 1
+
+    sql = "INSERT INTO Degradation VALUES(?, false, ?)"
+    cur.execute(sql, (firstIdAvailable, login))
+    conn.commit()
+    print("Une sanction de type \"dégradation\" ajoutée pour l'utilisateur " + login)
+
+def rendreRessource(login):
+    print("Retour d'une ressource.\nEn cas d'oubli des infos concernant la ressource, retourner au menu et selectionner l'option \"Voir mes ressources en cours d'emprunt\"")
+    titre = input("Veuillez saisir le nom de la ressource que vous souhaitez rendre : ")
+    nouvelEtat = input("Veuillez saisir l'état de la ressource rendue ('N':neuf, 'B':bon, 'A':abimé, 'P':perdu) : ")
+    dateEmprunt = input("Veuillez saisir la date de l'emprunt (AAA-MM-JJ) : ")
+    
+    #on récupère l'id et l'ancien etat de l'examplaire
+    sql = """SELECT e.id, e.etat FROM Pret p JOIN exemplaire e ON e.id = p.exemplaire 
+    NATURAL JOIN Ressource r WHERE p.date_emprunt = ? AND p.adherent = ? AND LOWER(r.titre) = ?"""
+    cur.execute(sql, (dateEmprunt, login, titre.lower()))
+    raws = cur.fetchall()
+    if(len(raws) != 1): 
+        print("Erreur, il ne devrait y avoir qu'un seul resultat a la requete !")
+        exit(1)
+    exemplaire = raws[0][0]
+    ancienEtat = raws[0][1]
+    if((ancienEtat=="Neuf" or ancienEtat=="Bon") and (nouvelEtat=="A")):
+        creerDegradation(login)
+    if(nouvelEtat=="P"):
+        creerDegradation(login)
+
+    sql = "UPDATE Pret SET date_retour = date('now') WHERE date_emprunt = ? AND adherent = ? AND exemplaire = ?"
+    cur.execute(sql, (dateEmprunt, login, exemplaire))
+    conn.commit()
+    print("Retour de la ressource effectué avec succès")
 
     
 
@@ -254,8 +288,9 @@ def afficherEmpruntsEnCours(login):
     JOIN Ressource R ON Contribution.code = R.code 
     JOIN Exemplaire E ON E.code = R.code
     JOIN Pret P ON P.exemplaire = E.id
-    WHERE date(P.date_emprunt, P.duree || ' days') > strftime('%Y-%m-%d','now') AND P.adherent = ? 
+    WHERE date_retour IS NULL AND P.adherent = ? 
     AND Contribution.type <> 'Acteur' """ 
+    # date(P.date_emprunt, P.duree || ' days') > strftime('%Y-%m-%d','now')
     # remplacer les fonctions pour le calcul de la date
     # cf https://librecours.net/module/bdd0/fonctions/pres/co/date.html?mode=html et fonciton now() 
 
@@ -332,7 +367,7 @@ def menuAdherent(login):
         print()
         menuAdherent(login)
     elif(choix == 3):
-        rendreRessource()   # détruire la ligne de pret de l'exemplaire emprunté, vérifier l'état et la date de rendu pour voir si il faut ajouter des sanctions
+        rendreRessource(login)
         print()
         menuAdherent(login)
     elif(choix == 4):
