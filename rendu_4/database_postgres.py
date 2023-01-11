@@ -292,6 +292,9 @@ def emprunterMusique(login, titre):
         print("Emprunt enregistré, veuillez le rendre dans 7 jours")
 
 def emprunterRessource(login):
+    if not checkCompteActif(login):
+        print("Impossible d'emprunter : votre compte n'est pas actif")
+        return
     typeEmprunt = input("Veuillez saisir le type de ressource que vous souhaitez emprunter ('L':Livre, 'F':Film, 'M':Musique) : ")
     titre = input("Veuillez saisir le nom de la ressource que vous souhaitez emprunter: ")
     if(typeEmprunt == 'L'):
@@ -302,6 +305,11 @@ def emprunterRessource(login):
         emprunterMusique(login, titre)
     else:
         emprunterRessource(login)
+
+def checkCompteActif(login):
+    requete = "Select 1 from Adherent where login = ? and carte_active = true" % login
+    cur.execute(requete)
+    return cur.fetchone()
 
 def creerDegradation(login):
     # on cherche le premier id disponible pour une nouvelle dégradation
